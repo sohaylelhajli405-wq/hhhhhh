@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCM - Chapitre 1 : L'économie de marché</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', 'Cairo', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
+
+    <!-- Header -->
+    <header class="bg-indigo-700 text-white shadow-md py-6 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <span class="bg-indigo-600 text-indigo-100 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">CPGE - Économie Générale</span>
+            <h1 class="text-2xl md:text-3xl font-bold mt-2">Module 1 : Les fondements de l'économie de marché</h1>
+            <p class="text-indigo-200 text-sm mt-1">QCM d'entraînement (20 Questions - Pages 1 à 9)</p>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-3xl w-full mx-auto px-4 py-8 flex-grow">
+        
+        <!-- Intro Card -->
+        <div id="intro-card" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 text-center">
+            <div class="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">📊</div>
+            <h2 class="text-xl font-bold text-slate-900 mb-2">Prêt à tester vos connaissances ?</h2>
+            <p class="text-slate-600 mb-6 text-sm md:text-base">Ce questionnaire comporte 20 questions à choix multiples basées sur le cours de l'économie de marché. Chaque question propose 4 choix dont une seule réponse est correcte.</p>
+            <button onclick="startQuiz()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-xl transition duration-200 shadow-md">
+                Commencer le QCM
+            </button>
+        </div>
+
+        <!-- Quiz Container -->
+        <div id="quiz-container" class="hidden space-y-6">
+            <!-- Progress Bar -->
+            <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200 flex items-center justify-between">
+                <span id="question-progress" class="text-sm font-semibold text-slate-600">Question 1 / 20</span>
+                <div class="w-1/2 bg-slate-200 h-2.5 rounded-full overflow-hidden">
+                    <div id="progress-bar" class="bg-indigo-600 h-2.5 transition-all duration-300" style="width: 5%;"></div>
+                </div>
+            </div>
+
+            <!-- Question Card -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
+                <h3 id="question-title" class="text-lg md:text-xl font-semibold text-slate-900 mb-6"></h3>
+                <div id="options-container" class="space-y-3"></div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="flex justify-between items-center pt-2">
+                <button id="prev-btn" onclick="prevQuestion()" class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-semibold px-6 py-2.5 rounded-xl transition duration-200 text-sm disabled:opacity-40 disabled:cursor-not-allowed">
+                    Précédent
+                </button>
+                <button id="next-btn" onclick="nextQuestion()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2.5 rounded-xl transition duration-200 text-sm shadow-sm">
+                    Suivant
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Container -->
+        <div id="result-container" class="hidden bg-white rounded-2xl shadow-sm border border-slate-200 p-8 text-center">
+            <div class="w-20 h-20 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl font-bold">🏆</div>
+            <h2 class="text-2xl font-bold text-slate-900 mb-2">Quiz terminé !</h2>
+            <p class="text-slate-600 mb-4">Voici votre score final :</p>
+            <div class="text-4xl font-extrabold text-indigo-600 mb-6" id="score-display">0 / 20</div>
+            <p id="score-feedback" class="text-slate-700 text-sm md:text-base mb-8 font-medium"></p>
+            <button onclick="restartQuiz()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-xl transition duration-200 shadow-md">
+                Recommencer le QCM
+            </button>
+        </div>
+
+    </main>
+
+    <footer class="text-center py-6 text-xs text-slate-500 border-t border-slate-200 mt-12">
+        CPGE Omar Al Khayyam • Module 1 : Les fondements de l'économie de marché
+    </footer>
+
+    <script>
+        const questions = [
+            {
+                question: "1. Sur le plan théorique, qu'est-ce qu'une « économie de marché » ?",
+                options: [
+                    "Un modèle où la coordination s'opère par la confrontation de l'offre et de la demande",
+                    "Un système où toutes les décisions économiques sont prises de façon centralisée par l'État",
+                    "Un marché unique réservé exclusivement aux transactions agricoles",
+                    "Un système économique sans aucune règle ni intervention publique"
+                ],
+                correct: 0
+            },
+            {
+                question: "2. Quel est le rôle principal des prix dans une économie de marché ?",
+                options: [
+                    "Fixer les salaires minimaux obligatoires par décret",
+                    "Servir de véhicules d'information, d'incitation et de coordination",
+                    "Empêcher totalement l'apparition d'externalités négatives",
+                    "Garantir une égalité stricte des revenus entre tous les citoyens"
+                ],
+                correct: 1
+            },
+            {
+                question: "3. Parmi les propositions suivantes, laquelle ne fait PAS partie des 4 fondamentaux (conditions d'existence du marché) ?",
+                options: [
+                    "Les droits de propriété",
+                    "La théorie de la valeur",
+                    "La planification intégrale de la production",
+                    "La monnaie"
+                ],
+                correct: 2
+            },
+            {
+                question: "4. Selon la théorie économique moderne, sur quels faits scientifiques s'appuie principalement la valeur d'échange ?",
+                options: [
+                    "Le coût du travail et la quantité de matière première",
+                    "L'utilité et la rareté",
+                    "Le temps de travail socialement nécessaire uniquement",
+                    "La décision unilatérale de l'État"
+                ],
+                correct: 1
+            },
+            {
+                question: "5. Quelles sont les 5 conditions structurelles du modèle de Concurrence Pure et Parfaite (CPP) ?",
+                options: [
+                    "Atomicité, homogénéité, libre entrée, transparence, mobilité des facteurs",
+                    "Monopole, asymétrie d'information, différenciation, rigidité, stabilité",
+                    "Transparence, intervention de l'État, interdiction d'exporter, flexibilité, rareté",
+                    "Cartel, oligopole, fixation des prix, protectionnisme, subventions"
+                ],
+                correct: 0
+            },
+            {
+                question: "6. Que stipule la « loi de la demande » formulée par Alfred Marshall ?",
+                options: [
+                    "La quantité demandée d'un bien augmente lorsque son prix augmente",
+                    "Toutes choses égales par ailleurs, la quantité demandée d'un bien diminue quand son prix augmente",
+                    "La demande est totalement indépendante du niveau des prix",
+                    "Le prix d'un bien est proportionnel au revenu global de l'État"
+                ],
+                correct: 1
+            },
+            {
+                question: "7. Qu'appelle-t-on « biens de Giffen » ?",
+                options: [
+                    "Des biens de luxe dont la demande augmente fortement avec le snobisme",
+                    "Des biens de première nécessité dont la demande augmente paradoxalement avec la hausse de leur prix",
+                    "Des biens dont l'élasticité-revenu est strictement supérieure à 1",
+                    "Des services publics financés exclusivement par l'impôt"
+                ],
+                correct: 1
+            },
+            {
+                question: "8. Comment qualifie-t-on un bien dont l'élasticité-revenu est comprise entre 0 et 1 ?",
+                options: [
+                    "Un bien inférieur",
+                    "Un bien de luxe ou supérieur",
+                    "Un bien normal (nécessaire)",
+                    "Un bien indépendant"
+                ],
+                correct: 2
+            },
+            {
+                question: "9. Si l'élasticité-prix croisée entre deux biens X et Y est positive, que peut-on en déduire ?",
+                options: [
+                    "Les deux biens sont complémentaires",
+                    "Les deux biens sont substituables",
+                    "Les deux biens sont totalement indépendants",
+                    "Le bien X est un bien inférieur"
+                ],
+                correct: 1
+            },
+            {
+                question: "10. Quelle est l'allure générale de la courbe d'offre d'un bien selon la loi de l'offre ?",
+                options: [
+                    "Décroissante : plus le prix est élevé, moins les producteurs offrent de quantités",
+                    "Croissante : plus le prix d'un bien est élevé, plus les producteurs augmentent la quantité offerte",
+                    "Horizontale : totalement insensible aux variations des prix",
+                    "Verticale : fixée par les autorités publiques"
+                ],
+                correct: 1
+            },
+            {
+                question: "11. Que se passe-t-il sur un marché lorsque le prix effectif est supérieur au prix d'équilibre (Offre > Demande) ?",
+                options: [
+                    "Une pénurie (demande excédentaire)",
+                    "Un excédent (surplus), entraînant une pression à la baisse sur les prix",
+                    "Une disparition immédiate de tous les producteurs",
+                    "Un blocage définitif du marché sans ajustement possible"
+                ],
+                correct: 1
+            },
+            {
+                question: "12. Qui est l'auteur de la célèbre métaphore de la « main invisible » pour décrire l'autorégulation du marché ?",
+                options: [
+                    "John Maynard Keynes",
+                    "Léon Walras",
+                    "Adam Smith",
+                    "Karl Marx"
+                ],
+                correct: 2
+            },
+            {
+                question: "13. Qu'est-ce qu'un « optimum de Pareto » ?",
+                options: [
+                    "Une situation où l'on peut améliorer le bien-être de tout le monde sans exception",
+                    "Une allocation des ressources telle qu'il est impossible d'améliorer le sort de l'un sans réduire la satisfaction d'un autre",
+                    "Un système de taxation mis en place pour éliminer les externalités négatives",
+                    "Un équilibre de sous-emploi persistant sur le marché du travail"
+                ],
+                correct: 1
+            },
+            {
+                question: "14. Parmi ces situations, laquelle illustre une externalité négative ?",
+                options: [
+                    "Le financement d'une campagne de vaccination par l'État",
+                    "L'installation d'une usine polluante à proximité d'un quartier résidentiel",
+                    "La découverte d'une nouvelle technologie brevetée",
+                    "L'achat de services de sécurité régaliens"
+                ],
+                correct: 1
+            },
+            {
+                question: "15. Qu'est-ce que la « tragédie des biens communs » (Garrett Hardin) ?",
+                options: [
+                    "La tendance à la surexploitation des biens caractérisés par la rivalité et la non-excluabilité",
+                    "La difficulté pour l'État de percevoir des impôts directs en période de récession",
+                    "La faillite des entreprises publiques en situation de monopole légal",
+                    "La baisse tendancielle du taux de profit dans le capitalisme"
+                ],
+                correct: 0
+            },
+            {
+                question: "16. Qu'appelle-t-on « sélection adverse » en situation d'asymétrie d'information ?",
+                options: [
+                    "Le fait qu'un agent cache son comportement après la signature d'un contrat",
+                    "Une situation où l'asymétrie conduit à écarter les bons produits pour ne sélectionner que les pires",
+                    "Une politique budgétaire restrictive menée par la banque centrale",
+                    "Le choix délibéré de l'État de privatiser un monopole naturel"
+                ],
+                correct: 1
+            },
+            {
+                question: "17. Quelle est la position des économistes keynésiens concernant le fonctionnement du marché ?",
+                options: [
+                    "Le marché s'autorégule toujours instantanément grâce à la flexibilité parfaite des prix",
+                    "Le marché peut s'enfermer durablement dans des équilibres de sous-emploi, nécessitant l'intervention active de l'État",
+                    "L'État ne doit exercer que des fonctions strictly régaliennes",
+                    "La politique monétaire est totalement inutile pour réguler l'activité"
+                ],
+                correct: 1
+            },
+            {
+                question: "18. Qu'est-ce qu'un marché en situation de « monopole » ?",
+                options: [
+                    "Un marché caractérisé par un grand nombre d'offreurs et de demandeurs",
+                    "Une structure de marché où un vendeur unique domine l'industrie sans substituts proches",
+                    "Un accord secret entre plusieurs entreprises pour fixer les prix",
+                    "Un marché où les produits offerts sont hétérogènes"
+                ],
+                correct: 1
+            },
+            {
+                question: "19. Quelle est la principale caractéristique de la « concurrence monopolistique » ?",
+                options: [
+                    "L'absence totale de concurrence et un produit unique",
+                    "L'atomicité du marché combinée à une différenciation des produits (marques, qualité, design)",
+                    "L'existence de deux seuls offreurs face à une multitude d'acheteurs",
+                    "Une intervention obligatoire de l'État pour fixer les quotas de production"
+                ],
+                correct: 1
+            },
+            {
+                question: "20. Que soutenait le courant physiocratique au XVIIIe siècle (not
